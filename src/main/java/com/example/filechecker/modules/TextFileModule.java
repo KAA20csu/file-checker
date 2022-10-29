@@ -4,9 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 @Component
 public class TextFileModule implements IModule {
@@ -45,11 +43,38 @@ public class TextFileModule implements IModule {
         }
         System.out.println(lineCounter);
     }
-    public void execute2(File file) {
+    public void execute2(File file) throws FileNotFoundException {
+        int totalCharacters = 0;
+        Scanner scanner = new Scanner(file);
+        Map<Character, ArrayList<Character>> dictionary = new HashMap<>();
 
+        while (scanner.hasNext()) {
+            char[] str = scanner.next().toLowerCase().toCharArray();
+            for (char symbol : str) {
+                if (!dictionary.containsKey(symbol))
+                    dictionary.put(symbol, new ArrayList<>());
+                ArrayList<Character> list = dictionary.get(symbol);
+                list.add(symbol);
+                totalCharacters++;
+            }
+        }
+
+        System.out.println("Characters count - " + totalCharacters);
+
+        for (ArrayList<Character> list : dictionary.values()) {
+            int count = list.size();
+            System.out.println("Count of each character - '" + list.get(0) + "': " + count);
+        }
     }
 
-    public void execute3(File file) {
+    public void execute3(File file) throws FileNotFoundException {
+        Scanner sc = new Scanner(new FileInputStream(file));
+        int count=0;
+        while(sc.hasNext()){
+            sc.next();
+            count++;
+        }
+        System.out.println("Count of words: " + count);
 
     }
 }
