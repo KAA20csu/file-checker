@@ -20,7 +20,7 @@ public class FileCheckerApplication {
     @Autowired
     public FileCheckerApplication(Collection<IModule> modules) { // инжектим все компоненты, реализующие IModule
         this.modules = modules;
-    }
+    } // инжектим модули
     public FileCheckerApplication(){}
 
     public static void main(String[] args) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
@@ -31,7 +31,7 @@ public class FileCheckerApplication {
         file = new File(path);
         for(IModule module : modules) {
             if(module.fileExtension(getFileExtension())) { // выбираем подходящий под расширение файла модуль
-                service.getOperations(module, file); // отдаём список операций
+                service.getOperations(module, file); // отдаём список операций, там же предлагаем выбрать операцию над файлом или директорией
             }
         }
     }

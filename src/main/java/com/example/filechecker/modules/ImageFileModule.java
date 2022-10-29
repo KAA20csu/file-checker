@@ -35,7 +35,7 @@ public class ImageFileModule implements IModule {
 
     @Override
     public void executeCommand(IModule module, int nextInt, File file) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        TextFileModule.class.getMethod("execute" + nextInt, File.class).invoke(this, file);
+        ImageFileModule.class.getMethod("execute" + nextInt, File.class).invoke(this, file);
     }
 
     public void execute1(File file) throws IOException {

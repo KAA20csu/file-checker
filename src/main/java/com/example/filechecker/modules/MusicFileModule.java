@@ -1,8 +1,5 @@
 package com.example.filechecker.modules;
 
-import com.drew.imaging.mp4.Mp4MetadataReader;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
 import org.springframework.stereotype.Component;
 import org.tritonus.share.sampled.file.TAudioFileFormat;
 
@@ -35,15 +32,16 @@ public class MusicFileModule implements IModule {
 
     @Override
     public void executeCommand(IModule module, int nextInt, File file) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        TextFileModule.class.getMethod("execute" + nextInt, File.class).invoke(this, file);
+        MusicFileModule.class.getMethod("execute" + nextInt, File.class).invoke(this, file);
     }
 
-    public void execute1(File file) throws IOException {
-        Metadata metadata = Mp4MetadataReader.readMetadata(file);
-        for (Directory directory : metadata.getDirectories()) {
-            if (directory.getName().equals("File")) {
-                System.out.println("Track name: " + directory.getDescription(1));
-            }
+    public void execute1(File file) throws IOException, UnsupportedAudioFileException {
+        AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(file);
+        if (fileFormat instanceof TAudioFileFormat) {
+            Map<?, ?> properties = fileFormat.properties();
+            String key = "title";
+            String author = (String) properties.get(key);
+            System.out.println("Title: " + author);
         }
     }
     public void execute2(File file) throws IOException, UnsupportedAudioFileException {
