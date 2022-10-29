@@ -75,6 +75,5 @@ public class TextFileModule implements IModule {
             count++;
         }
         System.out.println("Count of words: " + count);
-
     }
 }

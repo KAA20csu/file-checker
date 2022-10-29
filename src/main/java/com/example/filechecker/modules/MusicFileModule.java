@@ -1,11 +1,17 @@
 package com.example.filechecker.modules;
 
+import com.drew.imaging.mp4.Mp4MetadataReader;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
 import org.springframework.stereotype.Component;
+import org.tritonus.share.sampled.file.TAudioFileFormat;
 
-import java.io.File;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class MusicFileModule implements IModule {
@@ -29,6 +35,35 @@ public class MusicFileModule implements IModule {
 
     @Override
     public void executeCommand(IModule module, int nextInt, File file) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        TextFileModule.class.getMethod("execute" + nextInt, File.class).invoke(this, file);
+    }
 
+    public void execute1(File file) throws IOException {
+        Metadata metadata = Mp4MetadataReader.readMetadata(file);
+        for (Directory directory : metadata.getDirectories()) {
+            if (directory.getName().equals("File")) {
+                System.out.println("Track name: " + directory.getDescription(1));
+            }
+        }
+    }
+    public void execute2(File file) throws IOException, UnsupportedAudioFileException {
+        AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(file);
+        if (fileFormat instanceof TAudioFileFormat) {
+            Map<?, ?> properties = fileFormat.properties();
+            String key = "duration";
+            Long microSec = (Long) properties.get(key);
+            int sec = (int) (microSec / (1000 * 1000));
+            System.out.println("Duration of the song: " + sec + " seconds");
+        }
+    }
+
+    public void execute3(File file) throws IOException, UnsupportedAudioFileException {
+        AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(file);
+        if (fileFormat instanceof TAudioFileFormat) {
+            Map<?, ?> properties = fileFormat.properties();
+            String key = "author";
+            String author = (String) properties.get(key);
+            System.out.println("Author: " + author);
+        }
     }
 }
