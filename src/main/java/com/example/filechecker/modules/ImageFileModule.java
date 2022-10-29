@@ -2,6 +2,8 @@ package com.example.filechecker.modules;
 
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,5 +25,10 @@ public class ImageFileModule implements IModule {
         for(var function : functions) {
             System.out.println(function);
         }
+    }
+
+    @Override
+    public void executeCommand(IModule module, int nextInt, File file) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+
     }
 }

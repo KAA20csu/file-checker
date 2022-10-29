@@ -2,8 +2,8 @@ package com.example.filechecker.modules;
 
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -27,17 +27,29 @@ public class TextFileModule implements IModule {
         }
     }
 
-    public int executeFirst(File file) {
+    @Override
+    public void executeCommand(IModule module, int nextInt, File file) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        TextFileModule.class.getMethod("execute" + nextInt, File.class).invoke(this, file);
+    }
+
+    public void execute1(File file) {
         int lineCounter = 0;
-        try {
-            Scanner in = new Scanner(file);
-            while(in.hasNextLine()) {
+        try (var reader = new BufferedReader(new FileReader(file))) {
+            while (reader.readLine() != null) {
                 lineCounter++;
             }
-
-        } catch(FileNotFoundException ex) {
-            System.out.println(ex);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return lineCounter;
+        System.out.println(lineCounter);
+    }
+    public void execute2(File file) {
+
+    }
+
+    public void execute3(File file) {
+
     }
 }

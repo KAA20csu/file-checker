@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Scanner;
 
@@ -22,7 +23,7 @@ public class FileCheckerApplication {
     }
     public FileCheckerApplication(){}
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         SpringApplication.run(FileCheckerApplication.class, args);
         Scanner in = new Scanner(System.in);
         System.out.println("Please, enter file path: ");
@@ -30,7 +31,7 @@ public class FileCheckerApplication {
         file = new File(path);
         for(IModule module : modules) {
             if(module.fileExtension(getFileExtension())) { // выбираем подходящий под расширение файла модуль
-                service.getOperations(module); // отдаём список операций
+                service.getOperations(module, file); // отдаём список операций
             }
         }
     }
